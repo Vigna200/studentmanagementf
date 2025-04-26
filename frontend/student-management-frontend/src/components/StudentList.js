@@ -11,7 +11,7 @@ function StudentList() {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/students');
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/students/${id}`);
       setStudents(res.data);
     } catch (error) {
       console.error(error);
