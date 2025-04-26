@@ -1,21 +1,160 @@
-const mongoose = require('mongoose');
+import axios from 'axios';
+import React, { useState } from 'react';
+import './AddStudent.css'; // Linking the CSS file
 
-const studentIdRegex = /^1601\d{8}$/; // Assuming roll number starts with "1601"
+const AddStudent = () => {
+  const [studentData, setStudentData] = useState({
+    rollNumber: '', // Roll number input
+    firstName: '',
+    lastName: '',
+    email: '',
+    dob: '',
+    department: '',
+    enrollmentYear: '',
+    isActive: false
+  });
+  const [error, setError] = useState('');
 
-const studentSchema = new mongoose.Schema({
-  studentId: {
-    type: Number,
-    required: true,
-    unique: true,
-    match: [studentIdRegex, 'Student ID must follow the format 1601xxxxxxxx'],
-  },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  dob: { type: Date, required: true },
-  department: { type: String, required: true },
-  enrollmentYear: { type: Number, required: true },
-  isActive: { type: Boolean, default: true },
-}, { timestamps: true });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setStudentData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
-module.exports = mongoose.model('Student', studentSchema);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Prepare the data to send to the backend
+    const dataToSend = {
+      studentId: studentData.rollNumber,  // Correct field name for backend
+      firstName: studentData.firstName,
+      lastName: studentData.lastName,
+      email: studentData.email,
+      dob: studentData.dob,
+      department: studentData.department,
+      enrollmentYear: studentData.enrollmentYear,
+      isActive: studentData.isActive
+    };
+
+    try {
+      // Make the POST request to the backend with the correct data
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/students`, 
+        dataToSend
+      );
+
+      console.log('Student added successfully:', response.data);
+
+      // Clear the form after successful submission
+      setStudentData({
+        rollNumber: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        dob: '',
+        department: '',
+        enrollmentYear: '',
+        isActive: false
+      });
+      setError(''); // Clear error if successful
+    } catch (error) {
+      console.error('Failed to add student. Error:', error.response ? error.response.data : error.message);
+      setError('Failed to add student. Please try again.');
+    }
+  };
+
+  return (
+    <div className="addstudent-container">
+      <h2>Add New Student</h2>
+      {error && <p className="error-message">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="input-group">
+          <label>Roll Number</label>
+          <input
+            type="text"
+            name="rollNumber"
+            value={studentData.rollNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={studentData.firstName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={studentData.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={studentData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Date of Birth</label>
+          <input
+            type="date"
+            name="dob"
+            value={studentData.dob}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Department</label>
+          <input
+            type="text"
+            name="department"
+            value={studentData.department}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <label>Enrollment Year</label>
+          <input
+            type="number"
+            name="enrollmentYear"
+            value={studentData.enrollmentYear}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group checkbox-group">
+          <label>Active</label>
+          <input
+            type="checkbox"
+            name="isActive"
+            checked={studentData.isActive}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <button type="submit">Add Student</button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default AddStudent;

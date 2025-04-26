@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import './AddStudent.css'; // Linking the CSS file
 
 const AddStudent = () => {
   const [studentData, setStudentData] = useState({
+    rollNumber: '', // Added roll number
     firstName: '',
     lastName: '',
     email: '',
@@ -14,6 +15,7 @@ const AddStudent = () => {
   });
   const [error, setError] = useState('');
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setStudentData((prevData) => ({
@@ -22,15 +24,33 @@ const AddStudent = () => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Mapping rollNumber to studentId before sending to the backend
+      const dataToSend = {
+        studentId: studentData.rollNumber,  // Map rollNumber to studentId
+        firstName: studentData.firstName,
+        lastName: studentData.lastName,
+        email: studentData.email,
+        dob: studentData.dob,
+        department: studentData.department,
+        enrollmentYear: studentData.enrollmentYear,
+        isActive: studentData.isActive
+      };
+
+      // Sending the data to the backend
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/students`,
-        studentData
+        `${process.env.REACT_APP_BACKEND_URL}/api/students`, 
+        dataToSend
       );
+      
       console.log('Student added successfully:', response.data);
+
+      // Clear form after successful submission
       setStudentData({
+        rollNumber: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -47,11 +67,21 @@ const AddStudent = () => {
   };
 
   return (
-    <div className="add-student-form">
+    <div className="addstudent-container">
       <h2>Add New Student</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="input-group">
+          <label>Roll Number</label>
+          <input
+            type="text"
+            name="rollNumber"
+            value={studentData.rollNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="input-group">
           <label>First Name</label>
           <input
             type="text"
@@ -61,7 +91,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Last Name</label>
           <input
             type="text"
@@ -71,7 +101,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Email</label>
           <input
             type="email"
@@ -81,7 +111,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Date of Birth</label>
           <input
             type="date"
@@ -91,7 +121,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Department</label>
           <input
             type="text"
@@ -101,7 +131,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Enrollment Year</label>
           <input
             type="number"
@@ -111,7 +141,7 @@ const AddStudent = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group checkbox-group">
           <label>Active</label>
           <input
             type="checkbox"
@@ -126,6 +156,6 @@ const AddStudent = () => {
       </form>
     </div>
   );
-}
+};
 
 export default AddStudent;

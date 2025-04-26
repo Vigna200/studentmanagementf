@@ -6,6 +6,12 @@ const Student = require('../models/student');
 router.post('/', async (req, res) => {
   try {
     const student = new Student(req.body);
+
+    // Validation check (for debugging)
+    if (!student.studentId.match(/^1601\d{8}$/)) {
+      return res.status(400).json({ message: 'Invalid roll number format. It should be 1601xxxxxxxx' });
+    }
+
     const savedStudent = await student.save();
     res.status(201).json(savedStudent);
   } catch (err) {
