@@ -13,7 +13,7 @@ function ManageStudents() {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/students/${id}`);
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/students`);
       setStudents(res.data);
     } catch (error) {
       console.error(error);
@@ -26,7 +26,7 @@ function ManageStudents() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/students/${id}`);
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/students`);
       fetchStudents();
     } catch (error) {
       console.error(error);
