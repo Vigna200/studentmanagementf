@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
+// Update studentId regex to handle strings as input
 const studentIdRegex = /^1601\d{8}$/; // Assuming roll number starts with "1601"
 
 const studentSchema = new mongoose.Schema({
   studentId: {
-    type: Number,
+    type: String,  // Changed from Number to String
     required: true,
     unique: true,
     match: [studentIdRegex, 'Student ID must follow the format 1601xxxxxxxx'],
