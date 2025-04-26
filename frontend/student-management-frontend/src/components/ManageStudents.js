@@ -16,7 +16,7 @@ function ManageStudents() {
       const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/students`);
       setStudents(res.data);
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching students:', error);
     }
   };
 
@@ -26,10 +26,13 @@ function ManageStudents() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/students`);
-      fetchStudents();
+      const confirmDelete = window.confirm('Are you sure you want to delete this student?');
+      if (confirmDelete) {
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/students/${id}`);
+        fetchStudents(); // Refresh list after deletion
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting student:', error);
     }
   };
 
@@ -57,7 +60,7 @@ function ManageStudents() {
               <td>{student.firstName}</td>
               <td>{student.lastName}</td>
               <td>{student.email}</td>
-              <td>{student.dob}</td>
+              <td>{new Date(student.dob).toLocaleDateString()}</td>
               <td>{student.department}</td>
               <td>{student.enrollmentYear}</td>
               <td>{student.isActive ? 'Active' : 'Inactive'}</td>
