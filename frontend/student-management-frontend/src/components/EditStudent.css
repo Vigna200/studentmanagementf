@@ -1,0 +1,77 @@
+.editstudent-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 40px;
+  background: linear-gradient(to bottom right, #ffffff, #f6f1ff);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.editstudent-container h2 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #5e2b97;
+  letter-spacing: 0.5px;
+}
+
+.editstudent-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.editstudent-container input[type="text"],
+.editstudent-container input[type="email"],
+.editstudent-container input[type="date"],
+.editstudent-container input[type="number"],
+.editstudent-container input[type="password"],
+.editstudent-container input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.editstudent-container input:focus {
+  border-color: #7a3eea;
+  box-shadow: 0 0 8px rgba(123, 74, 226, 0.2);
+  outline: none;
+}
+
+.editstudent-container label {
+  font-weight: 500;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.editstudent-container .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editstudent-container button[type="submit"] {
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #7a3eea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.editstudent-container button[type="submit"]:hover {
+  background-color: #622cc2;
+  transform: translateY(-2px);
+}
